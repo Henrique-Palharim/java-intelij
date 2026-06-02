@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class MainController {
 
@@ -13,7 +14,7 @@ public class MainController {
     @FXML private Button btnCadastrar;
     @FXML private Button btnAlterar;
     @FXML private Button btnExcluir;
-    @FXML private Button btnLimpar; // <-- Adicionado o mapeamento do botão Limpar
+    @FXML private Button btnLimpar;
 
     // --- campos de texto ---
     @FXML private TextField txtNickname;
@@ -42,9 +43,28 @@ public class MainController {
 
     @FXML private void initialize() {
         System.out.println("FXML loaded successfully!");
+
+        colNickname.setCellValueFactory(new PropertyValueFactory<>("nickname"));
+        colTag.setCellValueFactory(new PropertyValueFactory<>("tag"));
+        colSenha.setCellValueFactory(new PropertyValueFactory<>("senha"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colLevel.setCellValueFactory(new PropertyValueFactory<>("level"));
+        colElo.setCellValueFactory(new PropertyValueFactory<>("elo"));
+        colRolePrincipal.setCellValueFactory(new PropertyValueFactory<>("role_principal"));
+        colRoleSecundaria.setCellValueFactory(new PropertyValueFactory<>("role_secundaria"));
+        colChampionFavorito.setCellValueFactory(new PropertyValueFactory<>("champion_favorito"));
+        colServidor.setCellValueFactory(new PropertyValueFactory<>("servidor"));
+
+        tabelaContas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> carregarCampos());
+
+        carregarPlayers();
     }
 
-    // --- métodos de ação ---
+    // --- métodos ---
+    private void carregarPlayers() {
+        PlayerDAO playerDAO = new PlayerDAO();
+        tabelaContas.setItems(playerDAO.listarTodos());
+    }
 
     @FXML void btnLimparAction(ActionEvent event) {
         limparCampos();
@@ -119,6 +139,25 @@ public class MainController {
             System.out.println("Conta excluída com sucesso!");
         } else {
             System.out.println("Por favor, selecione uma conta na tabela para excluir.");
+        }
+    }
+
+    @FXML private void carregarCampos() {
+        PlayerDTO objPlayerDTO = tabelaContas.getSelectionModel().getSelectedItem();
+
+        if (objPlayerDTO != null) {
+            txtNickname.setText(objPlayerDTO.getNickname());
+            txtTag.setText(objPlayerDTO.getTag());
+            txtSenha.setText(objPlayerDTO.getSenha());
+            txtEmail.setText(objPlayerDTO.getEmail());
+
+            txtLevel.setText(String.valueOf(objPlayerDTO.getLevel()));
+
+            txtElo.setText(objPlayerDTO.getElo());
+            txtRolePrincipal.setText(objPlayerDTO.getRole_principal());
+            txtRoleSecundaria.setText(objPlayerDTO.getRole_secundaria());
+            txtChampionFavorito.setText(objPlayerDTO.getChampion_favorito());
+            txtServidor.setText(objPlayerDTO.getServidor());
         }
     }
 

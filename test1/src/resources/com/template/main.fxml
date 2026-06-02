@@ -18,7 +18,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Button fx:id="btnExcluir" layoutX="349.0" layoutY="633.0" mnemonicParsing="false" onAction="#btnExcluirAction" prefHeight="42.0" prefWidth="127.0" style="-fx-background-color: #F29D43; -fx-background-radius: 3; -fx-font-size: 18;" text="Excluir" />
+            <Button fx:id="btnExcluir" layoutX="349.0" layoutY="633.0" mnemonicParsing="false" onAction="#btnExcluirAction" prefHeight="42.0" prefWidth="127.0" style="-fx-background-color: #FF5656; -fx-background-radius: 3; -fx-font-size: 18;" text="Excluir" />
             <Button fx:id="btnAlterar" layoutX="205.0" layoutY="633.0" mnemonicParsing="false" onAction="#btnAlterarAction" prefHeight="42.0" prefWidth="133.0" style="-fx-background-color: #F29D43; -fx-background-radius: 3; -fx-font-size: 18;" text="Alterar" />
             <Button fx:id="btnCadastrar" layoutX="64.0" layoutY="633.0" mnemonicParsing="false" onAction="#btnCadastrarAction" prefHeight="42.0" prefWidth="127.0" style="-fx-background-color: #F29D43; -fx-background-radius: 3; -fx-font-size: 18;" text="Cadastrar" />
             <Label layoutX="282.0" layoutY="108.0" prefHeight="30.0" prefWidth="50.0" style="-fx-text-fill: #fff;" text="Tag" textFill="WHITE">
@@ -61,7 +61,10 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="txtNickname" layoutX="63.0" layoutY="147.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;" />
+            <TextField fx:id="txtNickname" layoutX="63.0" layoutY="147.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></TextField>
             <Label layoutX="63.0" layoutY="41.0" prefHeight="35.0" prefWidth="252.0" style="-fx-text-fill: #fff; -fx-font-size: 28; -fx-font-weight: bold;" text="Cadastro de Conta" textFill="WHITE">
                <font>
                   <Font size="27.0" />
@@ -72,15 +75,42 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="txtTag" layoutX="282.0" layoutY="147.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;" />
-            <TextField fx:id="txtSenha" layoutX="63.0" layoutY="248.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;" />
-            <TextField fx:id="txtEmail" layoutX="282.0" layoutY="248.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;" />
-            <TextField fx:id="txtLevel" layoutX="63.0" layoutY="351.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;" />
-            <TextField fx:id="txtElo" layoutX="282.0" layoutY="351.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;" />
-            <TextField fx:id="txtRolePrincipal" layoutX="63.0" layoutY="453.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;" />
-            <TextField fx:id="txtRoleSecundaria" layoutX="282.0" layoutY="453.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;" />
-            <TextField fx:id="txtChampionFavorito" layoutX="63.0" layoutY="561.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;" />
-            <TextField fx:id="txtServidor" layoutX="282.0" layoutY="561.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;" />
+            <TextField fx:id="txtTag" layoutX="282.0" layoutY="147.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></TextField>
+            <TextField fx:id="txtSenha" layoutX="63.0" layoutY="248.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></TextField>
+            <TextField fx:id="txtEmail" layoutX="282.0" layoutY="248.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></TextField>
+            <TextField fx:id="txtLevel" layoutX="63.0" layoutY="351.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></TextField>
+            <TextField fx:id="txtElo" layoutX="282.0" layoutY="351.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></TextField>
+            <TextField fx:id="txtRolePrincipal" layoutX="63.0" layoutY="453.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></TextField>
+            <TextField fx:id="txtRoleSecundaria" layoutX="282.0" layoutY="453.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></TextField>
+            <TextField fx:id="txtChampionFavorito" layoutX="63.0" layoutY="561.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></TextField>
+            <TextField fx:id="txtServidor" layoutX="282.0" layoutY="561.0" prefHeight="35.0" prefWidth="194.0" style="-fx-background-color: #fff; -fx-background-radius: 3;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></TextField>
          </children>
       </Pane>
       <Pane layoutX="621.0" layoutY="73.0" prefHeight="752.0" prefWidth="780.0" style="-fx-background-color: #2D2752; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(15, 12, 30, 0.6), 15, 0, 0, 6);">
@@ -90,7 +120,7 @@
                   <Font size="27.0" />
                </font>
             </Label>
-            <TableView fx:id="tabelaContas" layoutX="63.0" layoutY="105.0" prefHeight="581.0" prefWidth="648.0" style="-fx-background-radius: 8;">
+            <TableView fx:id="tabelaContas" layoutX="63.0" layoutY="105.0" onMouseClicked="#carregarCampos" prefHeight="581.0" prefWidth="648.0" style="-fx-background-radius: 8;">
                <columns>
                   <TableColumn fx:id="colNickname" prefWidth="65.0" text="nickname" />
                   <TableColumn fx:id="colTag" prefWidth="38.0" text="tag" />
@@ -116,6 +146,6 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <Button fx:id="btnLimpar" layoutX="260.0" layoutY="852.0" mnemonicParsing="false" onAction="#btnLimparAction" prefHeight="42.0" prefWidth="127.0" style="-fx-background-color: #F29D43; -fx-background-radius: 3; -fx-font-size: 18;" text="Limpar" />
+      <Button fx:id="btnLimpar" layoutX="260.0" layoutY="852.0" mnemonicParsing="false" onAction="#btnLimparAction" prefHeight="42.0" prefWidth="127.0" style="-fx-background-color: #63D0FF; -fx-background-radius: 3; -fx-font-size: 18;" text="Limpar" />
    </children>
 </AnchorPane>

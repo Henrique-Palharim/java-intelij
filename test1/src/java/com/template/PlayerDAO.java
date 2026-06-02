@@ -182,4 +182,35 @@ public class PlayerDAO {
 
     }
 
+    public javafx.collections.ObservableList<PlayerDTO> listarTodos() {
+        javafx.collections.ObservableList<PlayerDTO> lista = javafx.collections.FXCollections.observableArrayList();
+        Conexao con = new Conexao();
+        String sql = "select * from player";
+
+        try (
+                Connection c = con.conectaBD();
+                PreparedStatement ps = c.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();
+        ) {
+            while (rs.next()) {
+                PlayerDTO player = new PlayerDTO();
+                player.setId(rs.getInt("id"));
+                player.setNickname(rs.getString("nickname"));
+                player.setTag(rs.getString("tag"));
+                player.setSenha(rs.getString("senha"));
+                player.setEmail(rs.getString("email"));
+                player.setLevel(rs.getInt("level"));
+                player.setElo(rs.getString("elo"));
+                player.setRole_principal(rs.getString("role_principal"));
+                player.setRole_secundaria(rs.getString("role_secundaria"));
+                player.setChampion_favorito(rs.getString("champion_favorito"));
+                player.setServidor(rs.getString("servidor"));
+                lista.add(player);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Erro ao listar players para a tabela", e);
+        }
+        return lista;
+    }
+
 }
