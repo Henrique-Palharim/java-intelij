@@ -94,6 +94,7 @@ public class MainController {
             playerDAO.insertPlayer(novoPlayer);
 
             limparCampos();
+            carregarPlayers();
             System.out.println("Conta cadastrada com sucesso via interface!");
 
         } catch (NumberFormatException e) {
@@ -121,7 +122,8 @@ public class MainController {
             playerDAO.updatePlayer(playerSelecionado);
 
             limparCampos();
-            System.out.println("Conta alterada com sucesso!");
+            carregarPlayers();
+            System.out.println("Conta alteredada com sucesso!");
         } else {
             System.out.println("Por favor, selecione uma conta na tabela para alterar.");
         }
@@ -136,6 +138,7 @@ public class MainController {
             playerDAO.deletePlayer(playerSelecionado.getId());
 
             limparCampos();
+            carregarPlayers(); // <-- ATUALIZA A TABELA APÓS EXCLUIR
             System.out.println("Conta excluída com sucesso!");
         } else {
             System.out.println("Por favor, selecione uma conta na tabela para excluir.");
