@@ -138,7 +138,7 @@ public class MainController {
             playerDAO.deletePlayer(playerSelecionado.getId());
 
             limparCampos();
-            carregarPlayers(); // <-- ATUALIZA A TABELA APÓS EXCLUIR
+            carregarPlayers();
             System.out.println("Conta excluída com sucesso!");
         } else {
             System.out.println("Por favor, selecione uma conta na tabela para excluir.");

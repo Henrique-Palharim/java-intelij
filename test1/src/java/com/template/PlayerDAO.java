@@ -185,7 +185,7 @@ public class PlayerDAO {
     public javafx.collections.ObservableList<PlayerDTO> listarTodos() {
         javafx.collections.ObservableList<PlayerDTO> lista = javafx.collections.FXCollections.observableArrayList();
         Conexao con = new Conexao();
-        String sql = "select * from player";
+        String sql = "select * from player order by id asc";
 
         try (
                 Connection c = con.conectaBD();
