@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 
 public class MainController {
 
@@ -54,13 +56,56 @@ public class MainController {
         colRoleSecundaria.setCellValueFactory(new PropertyValueFactory<>("role_secundaria"));
         colChampionFavorito.setCellValueFactory(new PropertyValueFactory<>("champion_favorito"));
         colServidor.setCellValueFactory(new PropertyValueFactory<>("servidor"));
+        
+        tabelaContas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> carregarCampos(newValue));
 
-        tabelaContas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> carregarCampos());
+        configurarValidacoesBototes();
 
         carregarPlayers();
     }
 
     // --- métodos ---
+    private void configurarValidacoesBototes() {
+
+        BooleanBinding camposInvalidos = Bindings.createBooleanBinding(() ->
+                        campoEstaVazio(txtNickname) || campoEstaVazio(txtTag) || campoEstaVazio(txtSenha) ||
+                                campoEstaVazio(txtEmail) || campoEstaVazio(txtLevel) || campoEstaVazio(txtElo) ||
+                                campoEstaVazio(txtRolePrincipal) || campoEstaVazio(txtRoleSecundaria) ||
+                                campoEstaVazio(txtChampionFavorito) || campoEstaVazio(txtServidor),
+
+                txtNickname.textProperty(), txtTag.textProperty(), txtSenha.textProperty(),
+                txtEmail.textProperty(), txtLevel.textProperty(), txtElo.textProperty(),
+                txtRolePrincipal.textProperty(), txtRoleSecundaria.textProperty(),
+                txtChampionFavorito.textProperty(), txtServidor.textProperty()
+        );
+
+        btnCadastrar.disableProperty().bind(camposInvalidos);
+
+        btnAlterar.disableProperty().bind(
+                camposInvalidos.or(tabelaContas.getSelectionModel().selectedItemProperty().isNull())
+        );
+
+        BooleanBinding todosCamposVazios = Bindings.createBooleanBinding(() ->
+                        campoEstaVazio(txtNickname) && campoEstaVazio(txtTag) && campoEstaVazio(txtSenha) &&
+                                campoEstaVazio(txtEmail) && campoEstaVazio(txtLevel) && campoEstaVazio(txtElo) &&
+                                campoEstaVazio(txtRolePrincipal) && campoEstaVazio(txtRoleSecundaria) &&
+                                campoEstaVazio(txtChampionFavorito) && campoEstaVazio(txtServidor),
+
+                txtNickname.textProperty(), txtTag.textProperty(), txtSenha.textProperty(),
+                txtEmail.textProperty(), txtLevel.textProperty(), txtElo.textProperty(),
+                txtRolePrincipal.textProperty(), txtRoleSecundaria.textProperty(),
+                txtChampionFavorito.textProperty(), txtServidor.textProperty()
+        );
+
+        btnLimpar.disableProperty().bind(todosCamposVazios);
+
+        btnExcluir.disableProperty().bind(tabelaContas.getSelectionModel().selectedItemProperty().isNull());
+    }
+
+    private boolean campoEstaVazio(TextField txt) {
+        return txt.getText() == null || txt.getText().trim().isEmpty();
+    }
+
     private void carregarPlayers() {
         PlayerDAO playerDAO = new PlayerDAO();
         tabelaContas.setItems(playerDAO.listarTodos());
@@ -123,7 +168,7 @@ public class MainController {
 
             limparCampos();
             carregarPlayers();
-            System.out.println("Conta alteredada com sucesso!");
+            System.out.println("Conta alterada com sucesso!");
         } else {
             System.out.println("Por favor, selecione uma conta na tabela para alterar.");
         }
@@ -145,9 +190,7 @@ public class MainController {
         }
     }
 
-    @FXML private void carregarCampos() {
-        PlayerDTO objPlayerDTO = tabelaContas.getSelectionModel().getSelectedItem();
-
+    private void carregarCampos(PlayerDTO objPlayerDTO) {
         if (objPlayerDTO != null) {
             txtNickname.setText(objPlayerDTO.getNickname());
             txtTag.setText(objPlayerDTO.getTag());
@@ -175,5 +218,7 @@ public class MainController {
         txtRoleSecundaria.clear();
         txtChampionFavorito.clear();
         txtServidor.clear();
+
+        tabelaContas.getSelectionModel().clearSelection();
     }
 }

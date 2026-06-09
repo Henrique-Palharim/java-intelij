@@ -121,7 +121,7 @@
                   <Font size="27.0" />
                </font>
             </Label>
-            <TableView fx:id="tabelaContas" layoutX="63.0" layoutY="105.0" onMouseClicked="#carregarCampos" prefHeight="581.0" prefWidth="648.0" style="-fx-background-radius: 8;">
+            <TableView fx:id="tabelaContas" layoutX="63.0" layoutY="105.0" prefHeight="581.0" prefWidth="648.0" style="-fx-background-radius: 8;">
                <columns>
                   <TableColumn fx:id="colNickname" prefWidth="65.0" text="nickname" />
                   <TableColumn fx:id="colTag" prefWidth="38.0" text="tag" />
