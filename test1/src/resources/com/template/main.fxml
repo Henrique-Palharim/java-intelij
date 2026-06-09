@@ -18,9 +18,9 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Button fx:id="btnExcluir" layoutX="282.0" layoutY="633.0" mnemonicParsing="false" onAction="#btnExcluirAction" prefHeight="42.0" prefWidth="127.0" style="-fx-background-color: #FF5656; -fx-background-radius: 3; -fx-font-size: 18; -fx-font-weight: bold;" text="Excluir" />
-            <Button fx:id="btnAlterar" layoutX="130.0" layoutY="689.0" mnemonicParsing="false" onAction="#btnAlterarAction" prefHeight="42.0" prefWidth="127.0" style="-fx-background-color: #F29D43; -fx-background-radius: 3; -fx-font-size: 18; -fx-font-weight: bold;" text="Alterar" />
-            <Button fx:id="btnCadastrar" layoutX="130.0" layoutY="633.0" mnemonicParsing="false" onAction="#btnCadastrarAction" prefHeight="42.0" prefWidth="127.0" style="-fx-background-color: #F29D43; -fx-background-radius: 3; -fx-font-size: 18; -fx-font-weight: bold;" text="Cadastrar" />
+            <Button fx:id="btnExcluir" layoutX="282.0" layoutY="633.0" mnemonicParsing="false" onAction="#btnExcluirAction" prefHeight="42.0" prefWidth="194.0" style="-fx-background-color: #FF5656; -fx-background-radius: 3; -fx-font-size: 18; -fx-font-weight: bold;" text="Excluir" />
+            <Button fx:id="btnAlterar" layoutX="63.0" layoutY="689.0" mnemonicParsing="false" onAction="#btnAlterarAction" prefHeight="42.0" prefWidth="194.0" style="-fx-background-color: #F29D43; -fx-background-radius: 3; -fx-font-size: 18; -fx-font-weight: bold;" text="Alterar" />
+            <Button fx:id="btnCadastrar" layoutX="63.0" layoutY="633.0" mnemonicParsing="false" onAction="#btnCadastrarAction" prefHeight="42.0" prefWidth="194.0" style="-fx-background-color: #F29D43; -fx-background-radius: 3; -fx-font-size: 18; -fx-font-weight: bold;" text="Cadastrar" />
             <Label layoutX="282.0" layoutY="108.0" prefHeight="30.0" prefWidth="50.0" style="-fx-text-fill: #fff;" text="Tag" textFill="WHITE">
                <font>
                   <Font size="20.0" />
@@ -111,7 +111,7 @@
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></TextField>
-            <Button fx:id="btnLimpar" layoutX="282.0" layoutY="689.0" mnemonicParsing="false" onAction="#btnLimparAction" prefHeight="42.0" prefWidth="127.0" style="-fx-background-color: #63D0FF; -fx-background-radius: 3; -fx-font-size: 18; -fx-font-weight: bold;" text="Limpar" />
+            <Button fx:id="btnLimpar" layoutX="282.0" layoutY="689.0" mnemonicParsing="false" onAction="#btnLimparAction" prefHeight="42.0" prefWidth="194.0" style="-fx-background-color: #63D0FF; -fx-background-radius: 3; -fx-font-size: 18; -fx-font-weight: bold;" text="Limpar" />
          </children>
       </Pane>
       <Pane layoutX="621.0" layoutY="73.0" prefHeight="752.0" prefWidth="780.0" style="-fx-background-color: #2D2752; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(15, 12, 30, 0.6), 15, 0, 0, 6);">

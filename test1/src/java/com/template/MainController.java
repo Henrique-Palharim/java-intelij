@@ -56,7 +56,7 @@ public class MainController {
         colRoleSecundaria.setCellValueFactory(new PropertyValueFactory<>("role_secundaria"));
         colChampionFavorito.setCellValueFactory(new PropertyValueFactory<>("champion_favorito"));
         colServidor.setCellValueFactory(new PropertyValueFactory<>("servidor"));
-        
+
         tabelaContas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> carregarCampos(newValue));
 
         configurarValidacoesBototes();
