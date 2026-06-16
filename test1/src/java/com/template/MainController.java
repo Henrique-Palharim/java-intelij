@@ -9,6 +9,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import java.util.Optional;
+import javafx.scene.control.PasswordField;
 
 public class MainController {
 
@@ -21,7 +25,7 @@ public class MainController {
     // --- campos de texto ---
     @FXML private TextField txtNickname;
     @FXML private TextField txtTag;
-    @FXML private TextField txtSenha;
+    @FXML private PasswordField txtSenha;
     @FXML private TextField txtEmail;
     @FXML private TextField txtLevel;
     @FXML private TextField txtElo;
@@ -138,11 +142,23 @@ public class MainController {
 
             playerDAO.insertPlayer(novoPlayer);
 
+            Alert alertaSucesso = new Alert(Alert.AlertType.INFORMATION);
+            alertaSucesso.setTitle("Cadastro Realizado");
+            alertaSucesso.setHeaderText(null);
+            alertaSucesso.setContentText("O player " + novoPlayer.getNickname() + "#" + novoPlayer.getTag() + " foi cadastrado com sucesso!");
+            alertaSucesso.showAndWait();
+
             limparCampos();
             carregarPlayers();
             System.out.println("Conta cadastrada com sucesso via interface!");
 
         } catch (NumberFormatException e) {
+            Alert alertaErro = new Alert(Alert.AlertType.ERROR);
+            alertaErro.setTitle("Erro no Formulário");
+            alertaErro.setHeaderText("Valor inválido");
+            alertaErro.setContentText("O campo 'Level' precisa ser um número inteiro válido.");
+            alertaErro.showAndWait();
+
             System.out.println("Erro: O campo Level precisa ser um número inteiro válido.");
         }
     }
@@ -151,24 +167,39 @@ public class MainController {
         PlayerDTO playerSelecionado = tabelaContas.getSelectionModel().getSelectedItem();
 
         if (playerSelecionado != null) {
-            PlayerDAO playerDAO = new PlayerDAO();
 
-            playerSelecionado.setNickname(txtNickname.getText());
-            playerSelecionado.setTag(txtTag.getText());
-            playerSelecionado.setSenha(txtSenha.getText());
-            playerSelecionado.setEmail(txtEmail.getText());
-            playerSelecionado.setLevel(Integer.parseInt(txtLevel.getText().trim()));
-            playerSelecionado.setElo(txtElo.getText());
-            playerSelecionado.setRole_principal(txtRolePrincipal.getText());
-            playerSelecionado.setRole_secundaria(txtRoleSecundaria.getText());
-            playerSelecionado.setChampion_favorito(txtChampionFavorito.getText());
-            playerSelecionado.setServidor(txtServidor.getText());
+            Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+            alerta.setTitle("Confirmação de Alteração");
+            alerta.setHeaderText("Você está prestes a alterar os dados deste player.");
+            alerta.setContentText("Deseja salvar as alterações para: " + playerSelecionado.getNickname() + "?");
 
-            playerDAO.updatePlayer(playerSelecionado);
+            Optional<ButtonType> resultado = alerta.showAndWait();
 
-            limparCampos();
-            carregarPlayers();
-            System.out.println("Conta alterada com sucesso!");
+            if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+                PlayerDAO playerDAO = new PlayerDAO();
+
+                playerSelecionado.setNickname(txtNickname.getText());
+                playerSelecionado.setTag(txtTag.getText());
+                playerSelecionado.setSenha(txtSenha.getText());
+                playerSelecionado.setEmail(txtEmail.getText());
+                playerSelecionado.setLevel(Integer.parseInt(txtLevel.getText().trim()));
+                playerSelecionado.setElo(txtElo.getText());
+                playerSelecionado.setRole_principal(txtRolePrincipal.getText());
+                playerSelecionado.setRole_secundaria(txtRoleSecundaria.getText());
+                playerSelecionado.setChampion_favorito(txtChampionFavorito.getText());
+                playerSelecionado.setServidor(txtServidor.getText());
+
+                playerDAO.updatePlayer(playerSelecionado);
+
+                limparCampos();
+                carregarPlayers();
+                System.out.println("Conta alterada com sucesso!");
+
+                // alerta de sucesso
+                mostrarAlertaInformativo("Sucesso", "Jogador atualizado com sucesso!");
+            } else {
+                System.out.println("Alteração cancelada pelo usuário.");
+            }
         } else {
             System.out.println("Por favor, selecione uma conta na tabela para alterar.");
         }
@@ -178,13 +209,28 @@ public class MainController {
         PlayerDTO playerSelecionado = tabelaContas.getSelectionModel().getSelectedItem();
 
         if (playerSelecionado != null) {
-            PlayerDAO playerDAO = new PlayerDAO();
 
-            playerDAO.deletePlayer(playerSelecionado.getId());
+            Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+            alerta.setTitle("Confirmação de Exclusão");
+            alerta.setHeaderText("Atenção! Esta ação não pode ser desfeita.");
+            alerta.setContentText("Tem certeza que deseja excluir o player: " + playerSelecionado.getNickname() + "#" + playerSelecionado.getTag() + "?");
 
-            limparCampos();
-            carregarPlayers();
-            System.out.println("Conta excluída com sucesso!");
+            Optional<ButtonType> resultado = alerta.showAndWait();
+
+            if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+                PlayerDAO playerDAO = new PlayerDAO();
+
+                playerDAO.deletePlayer(playerSelecionado.getId());
+
+                limparCampos();
+                carregarPlayers();
+                System.out.println("Conta excluída com sucesso!");
+
+                // alerta de sucesso
+                mostrarAlertaInformativo("Sucesso", "Jogador excluído com sucesso!");
+            } else {
+                System.out.println("Exclusão cancelada pelo usuário.");
+            }
         } else {
             System.out.println("Por favor, selecione uma conta na tabela para excluir.");
         }
@@ -220,5 +266,13 @@ public class MainController {
         txtServidor.clear();
 
         tabelaContas.getSelectionModel().clearSelection();
+    }
+
+    private void mostrarAlertaInformativo(String titulo, String mensagem) {
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensagem);
+        alerta.showAndWait();
     }
 }
