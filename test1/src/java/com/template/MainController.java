@@ -65,7 +65,7 @@ public class MainController {
 
         configurarValidacoesBototes();
 
-        carregarPlayers();
+        carregarTabela();
     }
 
     // --- métodos ---
@@ -110,7 +110,7 @@ public class MainController {
         return txt.getText() == null || txt.getText().trim().isEmpty();
     }
 
-    private void carregarPlayers() {
+    private void carregarTabela() {
         PlayerDAO playerDAO = new PlayerDAO();
         tabelaContas.setItems(playerDAO.listarTodos());
     }
@@ -149,8 +149,8 @@ public class MainController {
             alertaSucesso.showAndWait();
 
             limparCampos();
-            carregarPlayers();
-            System.out.println("Conta cadastrada com sucesso via interface!");
+            carregarTabela();
+            // System.out.println("Conta cadastrada com sucesso via interface!");
 
         } catch (NumberFormatException e) {
             Alert alertaErro = new Alert(Alert.AlertType.ERROR);
@@ -159,7 +159,7 @@ public class MainController {
             alertaErro.setContentText("O campo 'Level' precisa ser um número inteiro válido.");
             alertaErro.showAndWait();
 
-            System.out.println("Erro: O campo Level precisa ser um número inteiro válido.");
+            // System.out.println("Erro: O campo Level precisa ser um número inteiro válido.");
         }
     }
 
@@ -192,7 +192,7 @@ public class MainController {
                 playerDAO.updatePlayer(playerSelecionado);
 
                 limparCampos();
-                carregarPlayers();
+                carregarTabela();
                 System.out.println("Conta alterada com sucesso!");
 
                 // alerta de sucesso
@@ -223,7 +223,7 @@ public class MainController {
                 playerDAO.deletePlayer(playerSelecionado.getId());
 
                 limparCampos();
-                carregarPlayers();
+                carregarTabela();
                 System.out.println("Conta excluída com sucesso!");
 
                 // alerta de sucesso
