@@ -1,4 +1,6 @@
-package com.template;
+package com.template.model.dao;
+
+import com.template.model.dto.PlayerDTO;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
