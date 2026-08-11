@@ -1,13 +1,12 @@
 package com.template.controller;
 
+import com.template.model.functions.CarregarCamposFormularioFunction;
+import com.template.model.functions.ConfigurarValidacoesBotoesFunction;
+import com.template.model.functions.LimparCamposFormularioFunction;
 import com.template.model.dto.PlayerDTO;
 import com.template.model.service.PlayerService;
 import com.template.util.DialogUtil;
-import com.template.model.validador.ContaValidador;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.Property;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -22,16 +21,13 @@ public class MainController {
 
     private static final Logger LOGGER = Logger.getLogger(MainController.class.getName());
 
-    // Serviço responsável pelas regras e persistência
     private final PlayerService playerService = new PlayerService();
 
-    // Botões
     @FXML private Button btnCadastrar;
     @FXML private Button btnAlterar;
     @FXML private Button btnExcluir;
     @FXML private Button btnLimpar;
 
-    // Campos
     @FXML private TextField txtNickname;
     @FXML private TextField txtTag;
     @FXML private PasswordField txtSenha;
@@ -43,7 +39,6 @@ public class MainController {
     @FXML private TextField txtChampionFavorito;
     @FXML private TextField txtServidor;
 
-    // Tabela
     @FXML private TableView<PlayerDTO> tabelaContas;
 
     @FXML private TableColumn<PlayerDTO, String> colNickname;
@@ -79,52 +74,33 @@ public class MainController {
 
         tabelaContas.getSelectionModel()
                 .selectedItemProperty()
-                .addListener((obs, oldValue, newValue) -> carregarCampos(newValue));
+                .addListener((obs, oldValue, newValue) ->
+                        CarregarCamposFormularioFunction.executar(
+                                newValue, txtNickname, txtTag, txtSenha, txtEmail, txtLevel,
+                                txtElo, txtRolePrincipal, txtRoleSecundaria, txtChampionFavorito, txtServidor
+                        )
+                );
 
-        configurarValidacoesBotoes();
+        ConfigurarValidacoesBotoesFunction.executar(todosCampos, tabelaContas, btnCadastrar, btnLimpar, btnAlterar, btnExcluir);
         carregarTabela();
 
         LOGGER.info("Tela inicializada.");
     }
 
-    private void configurarValidacoesBotoes() {
-        Property<?>[] propriedadesTexto = todosCampos.stream()
-                .map(TextInputControl::textProperty)
-                .toArray(Property[]::new);
-
-        BooleanBinding algumCampoVazio = Bindings.createBooleanBinding(
-                () -> todosCampos.stream().anyMatch(c -> ContaValidador.campoVazio(c.getText())),
-                propriedadesTexto
-        );
-
-        BooleanBinding todosCamposVazios = Bindings.createBooleanBinding(
-                () -> todosCampos.stream().allMatch(c -> ContaValidador.campoVazio(c.getText())),
-                propriedadesTexto
-        );
-
-        btnCadastrar.disableProperty().bind(algumCampoVazio);
-        btnLimpar.disableProperty().bind(todosCamposVazios);
-
-        BooleanBinding nenhumItemSelecionado = tabelaContas.getSelectionModel().selectedItemProperty().isNull();
-        btnAlterar.disableProperty().bind(algumCampoVazio.or(nenhumItemSelecionado));
-        btnExcluir.disableProperty().bind(nenhumItemSelecionado);
-    }
-
     private void carregarTabela() {
-        // Agora busca via Service
         tabelaContas.setItems(playerService.listarTodos());
     }
 
     @FXML
     void btnLimparAction(ActionEvent event) {
-        limparCampos();
+        LimparCamposFormularioFunction.executar(todosCampos, tabelaContas);
         LOGGER.info("Campos limpos.");
     }
 
     @FXML
     void btnCadastrarAction(ActionEvent event) {
         try {
-            PlayerDTO player = playerService.cadastrarPlayer(
+            playerService.cadastrarPlayer(
                     txtNickname.getText(), txtTag.getText(), txtSenha.getText(),
                     txtEmail.getText(), txtLevel.getText(), txtElo.getText(),
                     txtRolePrincipal.getText(), txtRoleSecundaria.getText(),
@@ -132,7 +108,7 @@ public class MainController {
             );
 
             DialogUtil.showInfo("Cadastro realizado", "Player cadastrado com sucesso!");
-            limparCampos();
+            LimparCamposFormularioFunction.executar(todosCampos, tabelaContas);
             carregarTabela();
 
         } catch (IllegalArgumentException e) {
@@ -166,7 +142,7 @@ public class MainController {
                     txtChampionFavorito.getText(), txtServidor.getText()
             );
 
-            limparCampos();
+            LimparCamposFormularioFunction.executar(todosCampos, tabelaContas);
             carregarTabela();
 
             DialogUtil.showInfo("Sucesso", "Jogador atualizado com sucesso!");
@@ -197,7 +173,7 @@ public class MainController {
         try {
             playerService.excluirPlayer(player.getId());
 
-            limparCampos();
+            LimparCamposFormularioFunction.executar(todosCampos, tabelaContas);
             carregarTabela();
 
             DialogUtil.showInfo("Sucesso", "Jogador excluído com sucesso!");
@@ -207,26 +183,5 @@ public class MainController {
             LOGGER.log(Level.SEVERE, "Erro ao excluir jogador.", e);
             DialogUtil.showError("Erro", "Não foi possível excluir o jogador.");
         }
-    }
-
-    private void carregarCampos(PlayerDTO player) {
-        if (player == null) return;
-
-        txtNickname.setText(player.getNickname());
-        txtTag.setText(player.getTag());
-        txtSenha.setText(player.getSenha());
-        txtEmail.setText(player.getEmail());
-        txtLevel.setText(String.valueOf(player.getLevel()));
-        txtElo.setText(player.getElo());
-        txtRolePrincipal.setText(player.getRole_principal());
-        txtRoleSecundaria.setText(player.getRole_secundaria());
-        txtChampionFavorito.setText(player.getChampion_favorito());
-        txtServidor.setText(player.getServidor());
-    }
-
-    private void limparCampos() {
-        todosCampos.forEach(TextInputControl::clear);
-        tabelaContas.getSelectionModel().clearSelection();
-        LOGGER.info("Campos limpos.");
     }
 }

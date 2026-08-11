@@ -1,28 +1,23 @@
 package com.template.model.validador;
 
+import com.template.model.functions.CampoVazioFunction;
+import com.template.model.functions.CriarPlayerFunction;
+import com.template.model.functions.ValidarCamposObrigatoriosFunction;
+import com.template.model.functions.ValidarLevelFunction;
 import com.template.model.dto.PlayerDTO;
-import java.util.Arrays;
 
 public class ContaValidador {
 
     public static boolean campoVazio(String valor) {
-        return valor == null || valor.trim().isEmpty();
+        return CampoVazioFunction.executar(valor);
     }
 
     public static void validarCamposObrigatorios(String... campos) {
-        boolean algumVazio = Arrays.stream(campos).anyMatch(ContaValidador::campoVazio);
-
-        if (algumVazio) {
-            throw new IllegalArgumentException("Todos os campos devem ser preenchidos.");
-        }
+        ValidarCamposObrigatoriosFunction.executar(campos);
     }
 
     public static int validarLevel(String level) {
-        try {
-            return Integer.parseInt(level.trim());
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("O campo Level deve conter apenas números.");
-        }
+        return ValidarLevelFunction.executar(level);
     }
 
     public static PlayerDTO criarPlayer(
@@ -30,24 +25,9 @@ public class ContaValidador {
             String elo, String rolePrincipal, String roleSecundaria,
             String championFavorito, String servidor
     ) {
-
-        validarCamposObrigatorios(
+        return CriarPlayerFunction.executar(
                 nickname, tag, senha, email, level,
                 elo, rolePrincipal, roleSecundaria, championFavorito, servidor
         );
-
-        PlayerDTO player = new PlayerDTO();
-        player.setNickname(nickname);
-        player.setTag(tag);
-        player.setSenha(senha);
-        player.setEmail(email);
-        player.setLevel(validarLevel(level));
-        player.setElo(elo);
-        player.setRole_principal(rolePrincipal);
-        player.setRole_secundaria(roleSecundaria);
-        player.setChampion_favorito(championFavorito);
-        player.setServidor(servidor);
-
-        return player;
     }
 }
