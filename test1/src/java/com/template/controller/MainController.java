@@ -1,8 +1,6 @@
 package com.template.controller;
 
-import com.template.model.functions.CarregarCamposFormularioFunction;
-import com.template.model.functions.ConfigurarValidacoesBotoesFunction;
-import com.template.model.functions.LimparCamposFormularioFunction;
+import com.template.model.functions.PlayerFunctions;
 import com.template.model.dto.PlayerDTO;
 import com.template.model.service.PlayerService;
 import com.template.util.DialogUtil;
@@ -75,13 +73,13 @@ public class MainController {
         tabelaContas.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((obs, oldValue, newValue) ->
-                        CarregarCamposFormularioFunction.executar(
+                        PlayerFunctions.carregarCamposFormulario(
                                 newValue, txtNickname, txtTag, txtSenha, txtEmail, txtLevel,
                                 txtElo, txtRolePrincipal, txtRoleSecundaria, txtChampionFavorito, txtServidor
                         )
                 );
 
-        ConfigurarValidacoesBotoesFunction.executar(todosCampos, tabelaContas, btnCadastrar, btnLimpar, btnAlterar, btnExcluir);
+        PlayerFunctions.configurarValidacoesBotoes(todosCampos, tabelaContas, btnCadastrar, btnLimpar, btnAlterar, btnExcluir);
         carregarTabela();
 
         LOGGER.info("Tela inicializada.");
@@ -93,7 +91,7 @@ public class MainController {
 
     @FXML
     void btnLimparAction(ActionEvent event) {
-        LimparCamposFormularioFunction.executar(todosCampos, tabelaContas);
+        PlayerFunctions.limparCamposFormulario(todosCampos, tabelaContas);
         LOGGER.info("Campos limpos.");
     }
 
@@ -108,7 +106,7 @@ public class MainController {
             );
 
             DialogUtil.showInfo("Cadastro realizado", "Player cadastrado com sucesso!");
-            LimparCamposFormularioFunction.executar(todosCampos, tabelaContas);
+            PlayerFunctions.limparCamposFormulario(todosCampos, tabelaContas);
             carregarTabela();
 
         } catch (IllegalArgumentException e) {
@@ -142,7 +140,7 @@ public class MainController {
                     txtChampionFavorito.getText(), txtServidor.getText()
             );
 
-            LimparCamposFormularioFunction.executar(todosCampos, tabelaContas);
+            PlayerFunctions.limparCamposFormulario(todosCampos, tabelaContas);
             carregarTabela();
 
             DialogUtil.showInfo("Sucesso", "Jogador atualizado com sucesso!");
@@ -173,7 +171,7 @@ public class MainController {
         try {
             playerService.excluirPlayer(player.getId());
 
-            LimparCamposFormularioFunction.executar(todosCampos, tabelaContas);
+            PlayerFunctions.limparCamposFormulario(todosCampos, tabelaContas);
             carregarTabela();
 
             DialogUtil.showInfo("Sucesso", "Jogador excluído com sucesso!");
