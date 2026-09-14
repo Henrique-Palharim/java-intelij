@@ -1,8 +1,8 @@
 package com.template.controller;
 
-import com.template.model.functions.PlayerFunctions;
 import com.template.model.dto.PlayerDTO;
-import com.template.model.service.PlayerService;
+import com.template.model.functions.PlayerFunctions;
+import com.template.model.service.IPlayerService;
 import com.template.util.DialogUtil;
 
 import javafx.event.ActionEvent;
@@ -19,7 +19,12 @@ public class MainController {
 
     private static final Logger LOGGER = Logger.getLogger(MainController.class.getName());
 
-    private final PlayerService playerService = new PlayerService();
+    private final IPlayerService playerService;
+
+    // construtor utilizado pelo ControllerFactory no Main
+    public MainController(IPlayerService playerService) {
+        this.playerService = playerService;
+    }
 
     @FXML private Button btnCadastrar;
     @FXML private Button btnAlterar;
@@ -110,10 +115,12 @@ public class MainController {
             carregarTabela();
 
         } catch (IllegalArgumentException e) {
+            // erros de validação (ex: campo em branco ou formato inválido)
             DialogUtil.showError("Erro de validação", e.getMessage());
         } catch (Exception e) {
+            // erros do banco de dados (ex: e-mail duplicado)
             LOGGER.log(Level.SEVERE, "Erro ao cadastrar jogador.", e);
-            DialogUtil.showError("Erro", "Não foi possível cadastrar o jogador.");
+            DialogUtil.showError("Erro no Cadastro", e.getMessage());
         }
     }
 

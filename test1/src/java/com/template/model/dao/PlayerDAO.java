@@ -49,6 +49,7 @@ public class PlayerDAO {
         catch (SQLException e)
         {
             logger.log(Level.SEVERE, "Erro ao inserir player", e);
+            throw new RuntimeException("Erro ao cadastrar: E-mail ou dados já cadastrados no sistema.", e);
         }
 
     }
