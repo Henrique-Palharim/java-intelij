@@ -37,4 +37,9 @@ public class NumInteiroValidador implements Validador<String> {
     public String getErrorMessage() {
         return mensagemErro;
     }
+
+    @Override
+    public String getValor() {
+        return this.valor != null ? this.valor.trim() : null;
+    }
 }

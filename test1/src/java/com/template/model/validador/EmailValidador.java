@@ -25,4 +25,9 @@ public class EmailValidador implements Validador<String> {
     public String getErrorMessage() {
         return mensagemErro;
     }
+
+    @Override
+    public String getValor() {
+        return this.email;
+    }
 }
