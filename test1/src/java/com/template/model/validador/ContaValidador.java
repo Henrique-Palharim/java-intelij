@@ -16,39 +16,48 @@ public class ContaValidador implements IPlayerValidador {
             String elo, String rolePrincipal, String roleSecundaria,
             String championFavorito, String servidor
     ) {
-        List<Validador<String>> validadores = new ArrayList<>();
+        ValidarCamposObrigatorios vNickname = new ValidarCamposObrigatorios("Nickname", nickname);
+        ValidarCamposObrigatorios vTag = new ValidarCamposObrigatorios("Tag", tag);
+        ValidarCamposObrigatorios vSenha = new ValidarCamposObrigatorios("Senha", senha);
+        ValidarCamposObrigatorios vElo = new ValidarCamposObrigatorios("Elo", elo);
+        ValidarCamposObrigatorios vRoleMain = new ValidarCamposObrigatorios("Role Principal", rolePrincipal);
+        ValidarCamposObrigatorios vRoleSec = new ValidarCamposObrigatorios("Role Secundária", roleSecundaria);
+        ValidarCamposObrigatorios vChamp = new ValidarCamposObrigatorios("Champion Favorito", championFavorito);
+        ValidarCamposObrigatorios vServidor = new ValidarCamposObrigatorios("Servidor", servidor);
 
-        validadores.add(new ValidarCamposObrigatorios("Nickname", nickname));
-        validadores.add(new ValidarCamposObrigatorios("Tag", tag));
-        validadores.add(new ValidarCamposObrigatorios("Senha", senha));
-        validadores.add(new ValidarCamposObrigatorios("E-mail", email));
-        validadores.add(new ValidarCamposObrigatorios("Level", level));
-        validadores.add(new ValidarCamposObrigatorios("Elo", elo));
-        validadores.add(new ValidarCamposObrigatorios("Role Principal", rolePrincipal));
-        validadores.add(new ValidarCamposObrigatorios("Role Secundária", roleSecundaria));
-        validadores.add(new ValidarCamposObrigatorios("Champion Favorito", championFavorito));
-        validadores.add(new ValidarCamposObrigatorios("Servidor", servidor));
+        EmailValidador vEmail = new EmailValidador(email);
+        NumInteiroValidador vLevel = new NumInteiroValidador("Level", level, 1);
 
-        validadores.add(new EmailValidador(email));
-        validadores.add(new NumInteiroValidador("Level", level, 1));
+        List<Validador<?>> validadores = new ArrayList<>();
+        validadores.add(vNickname);
+        validadores.add(vTag);
+        validadores.add(vSenha);
+        validadores.add(vElo);
+        validadores.add(vRoleMain);
+        validadores.add(vRoleSec);
+        validadores.add(vChamp);
+        validadores.add(vServidor);
+        validadores.add(vEmail);
+        validadores.add(vLevel);
 
-        for (Validador<String> validador : validadores) {
+        for (Validador<?> validador : validadores) {
             if (!validador.validar()) {
                 throw new IllegalArgumentException(validador.getErrorMessage());
             }
         }
 
+        // montagem do DTO utilizando getValor()
         PlayerDTO player = new PlayerDTO();
-        player.setNickname(nickname.trim());
-        player.setTag(tag.trim().toUpperCase());
-        player.setSenha(senha);
-        player.setEmail(email.trim());
-        player.setLevel(Integer.parseInt(level.trim()));
-        player.setElo(elo.trim());
-        player.setRole_principal(rolePrincipal.trim());
-        player.setRole_secundaria(roleSecundaria.trim());
-        player.setChampion_favorito(championFavorito.trim());
-        player.setServidor(servidor.trim());
+        player.setNickname(vNickname.getValor());
+        player.setTag(vTag.getValor().toUpperCase());
+        player.setSenha(vSenha.getValor());
+        player.setEmail(vEmail.getValor());
+        player.setLevel(Integer.parseInt(vLevel.getValor()));
+        player.setElo(vElo.getValor());
+        player.setRole_principal(vRoleMain.getValor());
+        player.setRole_secundaria(vRoleSec.getValor());
+        player.setChampion_favorito(vChamp.getValor());
+        player.setServidor(vServidor.getValor());
 
         return player;
     }
