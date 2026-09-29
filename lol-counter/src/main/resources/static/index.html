@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>LoL Counter Matchups</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Buscar Counters</h2>
+    <input type="text" id="nomeCampeao" placeholder="Digite o nome do Campeão (ex: Aatrox)">
+    <button onclick="buscarCounters()">Buscar</button>
+
+    <div id="resultado"></div>
+</div>
+
+<script>
+    async function buscarCounters() {
+        const nome = document.getElementById('nomeCampeao').value;
+        const divResultado = document.getElementById('resultado');
+        divResultado.innerHTML = 'Carregando...';
+
+        try {
+            const response = await fetch(`/matchups/${nome}`);
+            const matchups = await response.json();
+
+            if (matchups.length === 0) {
+                divResultado.innerHTML = '<p>Nenhum counter cadastrado para este campeão.</p>';
+                return;
+            }
+
+            divResultado.innerHTML = '';
+            matchups.forEach(m => {
+                divResultado.innerHTML += `
+                    <div class="card" style="display: flex; gap: 15px; align-items: center;">
+                        <img src="${m.counter.urlImagem}" alt="${m.counter.nome}" style="width: 64px; height: 64px; border-radius: 50%;">
+                        <div>
+                            <h3>Counter: ${m.counter.nome}</h3>
+                            <p><strong>Runas:</strong> ${m.runasRecomendadas}</p>
+                            <p><strong>Itens:</strong> ${m.itensRecomendados}</p>
+                            <p><strong>Dicas:</strong> ${m.dicas}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        } catch (error) {
+            divResultado.innerHTML = '<p>Erro ao buscar dados.</p>';
+        }
+    }
+</script>
+
+</body>
+</html>

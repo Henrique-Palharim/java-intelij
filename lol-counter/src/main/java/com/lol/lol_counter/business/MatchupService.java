@@ -27,4 +27,22 @@ public class MatchupService {
         return repository.findAll();
     }
 
+    public Matchup atualizarMatchup(Long id, Matchup matchupAtualizado) {
+        Matchup matchupExistente = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Matchup não encontrado com ID: " + id));
+
+        matchupExistente.setRunasRecomendadas(matchupAtualizado.getRunasRecomendadas());
+        matchupExistente.setItensRecomendados(matchupAtualizado.getItensRecomendados());
+        matchupExistente.setDicas(matchupAtualizado.getDicas());
+
+        return repository.save(matchupExistente);
+    }
+
+    public void deletarMatchup(Long id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Matchup não encontrado com ID: " + id);
+        }
+        repository.deleteById(id);
+    }
+
 }

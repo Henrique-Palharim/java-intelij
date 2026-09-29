@@ -10,6 +10,7 @@ import lombok.*;
 @Builder
 @Table(name = "campeao")
 @Entity
+
 public class Campeao {
 
     @Id
@@ -19,7 +20,9 @@ public class Campeao {
     @Column(name = "nome", nullable = false, unique = true)
     private String nome;
 
-    @Column(name = "funcao") // ex: Top, Mid, Jungle, ADC, Suporte
-    private String funcao;
+    @Column(name = "chave_riot")
+    private String chaveRiot; // ex: "Aatrox", "MonkeyKing" (usado para montar a URL da imagem)
 
+    @Column(name = "url_imagem")
+    private String urlImagem;
 }
