@@ -1,44 +1,48 @@
-package com.javanauta.cadastro_usuario.business;
 
-import com.javanauta.cadastro_usuario.infrastructure.entitys.Usuario;
-import com.javanauta.cadastro_usuario.infrastructure.repository.UsuarioRepository;
+package com.campeoes.cadastro_campeoes.business;
+
+import com.campeoes.cadastro_campeoes.infrastructure.entitys.Campeao;
+import com.campeoes.cadastro_campeoes.infrastructure.repository.CampeaoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class UsuarioService {
+public class CampeaoService {
 
-    private final UsuarioRepository repository;
+    private final CampeaoRepository repository;
 
-    public UsuarioService(UsuarioRepository repository) {
+    public CampeaoService(CampeaoRepository repository) {
         this.repository = repository;
     }
 
-    public void salvarUsuario(Usuario usuario){
-        repository.saveAndFlush(usuario);
+    public Campeao cadastrar(Campeao campeao) {
+        return repository.save(campeao);
     }
 
-    public Usuario buscarUsuarioPorEmail(String email){
-
-        return repository.findByEmail(email).orElseThrow(
-                () -> new RuntimeException("Email não encontrado")
-        );
+    public List<Campeao> listarTodos() {
+        return repository.findAll();
     }
 
-    public void deletarUsuarioPorEmail(String email){
-        repository.deleteByEmail(email);
+    public Campeao buscarPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Campeão não encontrado"));
     }
 
-    public void atualizarUsuarioPorId(Integer id, Usuario usuario){
-        Usuario usuarioEntity = repository.findById(id).orElseThrow(() ->
-                new RuntimeException("Usuario não encontrado"));
-        Usuario usuarioAtualizado = Usuario.builder()
-                .email(usuario.getEmail() != null ? usuario.getEmail() :
-                        usuarioEntity.getEmail())
-                .nome(usuario.getNome() != null ? usuario.getNome() :
-                        usuarioEntity.getNome())
-                .id(usuarioEntity.getId())
-                .build();
+    public Campeao atualizar(Long id, Campeao dados) {
+        Campeao campeao = buscarPorId(id);
 
-        repository.saveAndFlush(usuarioAtualizado);
+        campeao.setNome(dados.getNome());
+        campeao.setRota(dados.getRota());
+        campeao.setClasse(dados.getClasse());
+        campeao.setRegiao(dados.getRegiao());
+
+        return repository.save(campeao);
+    }
+
+    public void excluir(Long id) {
+        Campeao campeao = buscarPorId(id);
+        repository.delete(campeao);
     }
 }

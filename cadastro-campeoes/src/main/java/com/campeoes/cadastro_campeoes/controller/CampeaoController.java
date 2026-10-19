@@ -1,39 +1,53 @@
-package com.javanauta.cadastro_usuario.controller;
 
-import com.javanauta.cadastro_usuario.business.UsuarioService;
-import com.javanauta.cadastro_usuario.infrastructure.entitys.Usuario;
-import lombok.RequiredArgsConstructor;
+package com.campeoes.cadastro_campeoes.controller;
+
+import com.campeoes.cadastro_campeoes.business.CampeaoService;
+import com.campeoes.cadastro_campeoes.infrastructure.entitys.Campeao;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/usuario")
-@RequiredArgsConstructor
-public class UsuarioController {
+import java.util.List;
 
-    private final UsuarioService usuarioService;
+@RestController
+@RequestMapping("/campeoes")
+public class CampeaoController {
+
+    private final CampeaoService campeaoService;
+
+    public CampeaoController(CampeaoService campeaoService) {
+        this.campeaoService = campeaoService;
+    }
 
     @PostMapping
-    public ResponseEntity<Void> salvarUsuario(@RequestBody Usuario usuario){
-        usuarioService.salvarUsuario(usuario);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Campeao> cadastrar(
+            @RequestBody Campeao campeao) {
+        Campeao salvo = campeaoService.cadastrar(campeao);
+        return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 
     @GetMapping
-    public ResponseEntity<Usuario> buscarUsuarioPorEmail(@RequestParam String email){
-        return ResponseEntity.ok(usuarioService.buscarUsuarioPorEmail(email));
+    public ResponseEntity<List<Campeao>> listarTodos() {
+        return ResponseEntity.ok(campeaoService.listarTodos());
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deletarUsuarioPorEmail(@RequestParam String email){
-        usuarioService.deletarUsuarioPorEmail(email);
-        return ResponseEntity.ok().build();
+    @GetMapping("/{id}")
+    public ResponseEntity<Campeao> buscarPorId(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(campeaoService.buscarPorId(id));
     }
 
-    @PutMapping
-    public ResponseEntity<Void> atualizarUsuarioPorId(@RequestParam Integer id,
-                                                      @RequestBody Usuario usuario){
-        usuarioService.atualizarUsuarioPorId(id, usuario);
-        return ResponseEntity.ok().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<Campeao> atualizar(
+            @PathVariable Long id,
+            @RequestBody Campeao campeao) {
+        return ResponseEntity.ok(campeaoService.atualizar(id, campeao));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        campeaoService.excluir(id);
+        return ResponseEntity.noContent().build();
     }
 }

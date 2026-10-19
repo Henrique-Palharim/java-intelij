@@ -1,4 +1,5 @@
-package com.javanauta.cadastro_usuario.infrastructure.entitys;
+
+package com.campeoes.cadastro_campeoes.infrastructure.entitys;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,17 +9,23 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "usuario")
 @Entity
-public class Usuario {
+@Table(name = "campeoes")
+public class Campeao {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "email", unique = true)
-    private String email;
-
-    @Column(name = "nome")
+    @Column(nullable = false, unique = true)
     private String nome;
+
+    @Column(nullable = false)
+    private String rota;
+
+    @Column(nullable = false)
+    private String classe;
+
+    @Column(nullable = false)
+    private String regiao;
 }
