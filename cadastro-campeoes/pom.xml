@@ -38,17 +38,21 @@
 		</dependency>
 
 		<!-- Banco de dados H2 -->
+		<!--
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		-->
 
 		<!-- Console web do H2 -->
+		<!--
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-h2console</artifactId>
 		</dependency>
+		-->
 
 		<!-- Reduz código repetitivo nas entidades -->
 		<dependency>
@@ -62,6 +66,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 
 	</dependencies>
