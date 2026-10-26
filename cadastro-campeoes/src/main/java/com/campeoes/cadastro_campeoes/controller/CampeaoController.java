@@ -1,4 +1,3 @@
-
 package com.campeoes.cadastro_campeoes.controller;
 
 import com.campeoes.cadastro_campeoes.business.CampeaoService;
@@ -21,8 +20,7 @@ public class CampeaoController {
     }
 
     @PostMapping
-    public ResponseEntity<Campeao> cadastrar(
-            @RequestBody Campeao campeao) {
+    public ResponseEntity<Campeao> cadastrar(@RequestBody Campeao campeao) {
         Campeao salvo = campeaoService.cadastrar(campeao);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
@@ -32,9 +30,10 @@ public class CampeaoController {
         return ResponseEntity.ok(campeaoService.listarTodos());
     }
 
+    // --- endpoints por ID ---
+
     @GetMapping("/{id}")
-    public ResponseEntity<Campeao> buscarPorId(
-            @PathVariable Long id) {
+    public ResponseEntity<Campeao> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(campeaoService.buscarPorId(id));
     }
 
@@ -48,6 +47,26 @@ public class CampeaoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
         campeaoService.excluir(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // --- endpoints por NOME ---
+
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<Campeao> buscarPorNome(@PathVariable String nome) {
+        return ResponseEntity.ok(campeaoService.buscarPorNome(nome));
+    }
+
+    @PutMapping("/nome/{nome}")
+    public ResponseEntity<Campeao> atualizarPorNome(
+            @PathVariable String nome,
+            @RequestBody Campeao campeao) {
+        return ResponseEntity.ok(campeaoService.atualizarPorNome(nome, campeao));
+    }
+
+    @DeleteMapping("/nome/{nome}")
+    public ResponseEntity<Void> excluirPorNome(@PathVariable String nome) {
+        campeaoService.excluirPorNome(nome);
         return ResponseEntity.noContent().build();
     }
 }
