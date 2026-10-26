@@ -17,12 +17,15 @@ public class Campeao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nome", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String nome;
 
-    @Column(name = "chave_riot")
-    private String chaveRiot; // ex: "Aatrox", "MonkeyKing" (usado para montar a URL da imagem)
+    @Column(nullable = false)
+    private String rota;
 
-    @Column(name = "url_imagem")
-    private String urlImagem;
+    @Column(nullable = false)
+    private String classe;
+
+    @Column(nullable = false)
+    private String regiao;
 }
