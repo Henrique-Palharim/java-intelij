@@ -1,13 +1,356 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de Campeões</title>
-  <link rel="stylesheet" href="/style.css">
+
+  <title>Cadastro de Campeões | League of Legends</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Spinnaker&display=swap" rel="stylesheet">
 </head>
+
 <body>
-<h1>Cadastro de Campeões</h1>
-<p>Bem-vindo ao cadastro de campeões de League of Legends!</p>
+
+<header class="header">
+  <div class="header-content">
+    <span class="header-subtitle">UNIVERSO DE RUNETERRA</span>
+    <h1>LEAGUE OF LEGENDS</h1>
+    <p>GERENCIAMENTO DE CAMPEÕES</p>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- Cadastro de Campeões -->
+  <section class="card form-card">
+
+    <div class="section-title">
+      <span class="title-icon">✦</span>
+      <div>
+        <h2 id="form-title">Cadastrar Campeão</h2>
+        <p>Adicione um novo campeão ao seu catálogo.</p>
+      </div>
+    </div>
+
+    <form id="campeao-form">
+
+      <input type="hidden" id="campeao-id">
+
+      <div class="input-group">
+        <label for="nome">NOME DO CAMPEÃO</label>
+        <input type="text" id="nome"
+               placeholder="Ex: Ahri, Yasuo..." required>
+      </div>
+
+      <div class="input-group">
+        <label for="rota">ROTA PRINCIPAL</label>
+        <select id="rota" required>
+          <option value="">Selecione uma rota</option>
+          <option value="Topo">Topo</option>
+          <option value="Selva">Selva</option>
+          <option value="Meio">Meio</option>
+          <option value="Atirador">Atirador</option>
+          <option value="Suporte">Suporte</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="classe">CLASSE</label>
+        <input type="text" id="classe"
+               placeholder="Ex: Mago, Assassino, Lutador..." required>
+      </div>
+
+      <div class="input-group">
+        <label for="regiao">REGIÃO DE ORIGEM</label>
+        <input type="text" id="regiao"
+               placeholder="Ex: Ionia, Noxus, Demacia..." required>
+      </div>
+
+      <div class="form-buttons">
+
+        <button type="submit" id="btn-salvar" class="btn btn-primary">
+          ✦ Salvar Campeão
+        </button>
+
+        <button type="button" id="btn-cancelar"
+                class="btn btn-secondary hidden"
+                onclick="limparFormulario()">
+          Cancelar
+        </button>
+
+      </div>
+
+    </form>
+
+  </section>
+
+  <!-- Lista de Campeões -->
+  <section class="card list-card">
+
+    <div class="list-header">
+
+      <div class="section-title">
+        <span class="title-icon">⚔</span>
+        <div>
+          <h2>Campeões Cadastrados</h2>
+          <p>Consulte e gerencie os campeões de Runeterra.</p>
+        </div>
+      </div>
+
+      <!-- Grupo de Busca e Botão Atualizar -->
+      <div class="search-group">
+        <input type="text" id="input-busca" placeholder="Buscar por nome..." onkeyup="tratarEnterBusca(event)">
+        <button onclick="buscarPorNomeFrontend()" class="btn btn-search">
+          🔍 Buscar
+        </button>
+        <button onclick="carregarCampeoes()" class="btn btn-refresh">
+          ↻ Atualizar
+        </button>
+      </div>
+
+    </div>
+
+    <div class="table-responsive">
+
+      <table>
+
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Rota</th>
+          <th>Classe</th>
+          <th>Região</th>
+          <th>Ações</th>
+        </tr>
+        </thead>
+
+        <tbody id="tabela-campeoes">
+        <!-- Preenchido via JavaScript -->
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  <p>LEAGUE OF LEGENDS • RUNETERRA</p>
+  <span>Projeto de Cadastro de Campeões</span>
+</footer>
+
+<script>
+  const API_URL = 'http://localhost:8081/campeoes';
+
+  document.addEventListener('DOMContentLoaded', carregarCampeoes);
+
+  // GET - Listar campeões
+  async function carregarCampeoes() {
+    try {
+      const response = await fetch(API_URL);
+      /*
+        Exemplo de requisição GET por nome
+
+        const response = await fetch(`http://localhost:8081/campeoes/nome/${nome}`);
+      */
+
+      if (!response.ok) throw new Error('Erro ao buscar campeões');
+
+      const campeoes = await response.json();
+      renderizarTabela(campeoes);
+
+    } catch (error) {
+      console.error(error);
+      alert('Erro ao conectar com o backend!');
+    }
+  }
+
+  function renderizarTabela(campeoes) {
+    const tbody = document.getElementById('tabela-campeoes');
+    tbody.innerHTML = '';
+
+    if (campeoes.length === 0) {
+      tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-message">
+                            Nenhum campeão cadastrado.
+                        </td>
+                    </tr>
+                `;
+      return;
+    }
+
+    campeoes.forEach(c => {
+      const tr = document.createElement('tr');
+
+      tr.innerHTML = `
+                    <td>#${c.id}</td>
+                    <td><strong>${c.nome}</strong></td>
+                    <td><span class="badge">${c.rota}</span></td>
+                    <td>${c.classe}</td>
+                    <td>${c.regiao}</td>
+
+                    <td class="actions">
+                        <button class="btn-icon btn-edit"
+                            onclick="prepararEdicao(${c.id}, '${c.nome}', '${c.rota}', '${c.classe}', '${c.regiao}')">
+                            Editar
+                        </button>
+
+                        <button class="btn-icon btn-delete"
+                            onclick="deletarCampeao(${c.id})">
+                            Excluir
+                        </button>
+                    </td>
+                `;
+
+      tbody.appendChild(tr);
+    });
+  }
+
+  // POST / PUT - Cadastrar ou atualizar
+  document.getElementById('campeao-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const id = document.getElementById('campeao-id').value;
+
+    const campeaoData = {
+      nome: document.getElementById('nome').value,
+      rota: document.getElementById('rota').value,
+      classe: document.getElementById('classe').value,
+      regiao: document.getElementById('regiao').value
+    };
+
+    const isEditMode = id !== '';
+    const url = isEditMode ? `${API_URL}/${id}` : API_URL;
+    const method = isEditMode ? 'PUT' : 'POST';
+
+    try {
+      const response = await fetch(url, {
+        method: method, // define se será usado POST ou PUT
+        headers: { 'Content-Type': 'application/json' }, // conteúdo tipo json
+        body: JSON.stringify(campeaoData) // pacote de dados real - conversão de dados da tela em texto JSON
+      });
+
+      if (response.ok) {
+        limparFormulario();
+        carregarCampeoes();
+      } else {
+        alert('Erro ao salvar campeão.');
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert('Erro de conexão ao salvar.');
+    }
+  });
+
+  // DELETE - Excluir campeão
+  async function deletarCampeao(id) {
+    if (!confirm(`Tem certeza que deseja excluir o campeão de ID ${id}?`)) return;
+
+    try {
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        carregarCampeoes();
+      } else {
+        alert('Erro ao deletar campeão.');
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert('Erro de conexão ao deletar.');
+    }
+  }
+
+  // Preparar edição - preenche os campos quando algum botão "editar" for clicado
+  function prepararEdicao(id, nome, rota, classe, regiao) {
+    document.getElementById('campeao-id').value = id;
+    document.getElementById('nome').value = nome;
+    document.getElementById('rota').value = rota;
+    document.getElementById('classe').value = classe;
+    document.getElementById('regiao').value = regiao;
+
+    document.getElementById('form-title').innerText = `Editar Campeão #${id}`;
+    document.getElementById('btn-salvar').innerText = 'Atualizar Campeão';
+    document.getElementById('btn-cancelar').classList.remove('hidden');
+  }
+
+  // Limpar formulário - reseta todos os inputs e restaura o botão principal para "salvar campeão"
+  function limparFormulario() {
+    document.getElementById('campeao-id').value = '';
+    document.getElementById('campeao-form').reset();
+
+    document.getElementById('form-title').innerText = 'Cadastrar Campeão';
+    document.getElementById('btn-salvar').innerText = '✦ Salvar Campeão';
+
+    document.getElementById('btn-cancelar').classList.add('hidden');
+  }
+
+  // GET por Nome - Filtrar campeão digitado no campo de busca
+  async function buscarPorNomeFrontend() {
+    const nome = document.getElementById('input-busca').value.trim();
+
+    // Se o campo estiver vazio, apenas recarrega todos os campeões
+    if (nome === '') {
+      carregarCampeoes();
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/nome/${nome}`);
+
+      if (response.status === 404 || !response.ok) {
+        // Exibe tabela vazia caso o campeão não seja encontrado
+        renderizarTabela([]);
+        return;
+      }
+
+      const campeao = await response.json();
+
+      // Como a busca por nome retorna 1 único campeão (objeto),
+      // empacotamos dentro de uma array [] para reutilizar a função renderizarTabela
+      renderizarTabela([campeao]);
+
+    } catch (error) {
+      console.error(error);
+      alert('Erro ao buscar campeão por nome!');
+    }
+  }
+
+  // Permite acionar a busca ao apertar a tecla "Enter" no teclado
+  function tratarEnterBusca(event) {
+    if (event.key === 'Enter') {
+      buscarPorNomeFrontend();
+    }
+  }
+
+  // Atualização da função carregarCampeoes existente para limpar a barra de pesquisa
+  async function carregarCampeoes() {
+    try {
+      document.getElementById('input-busca').value = ''; // Limpa o campo ao atualizar a lista
+      const response = await fetch(API_URL);
+
+      if (!response.ok) throw new Error('Erro ao buscar campeões');
+
+      const campeoes = await response.json();
+      renderizarTabela(campeoes);
+
+    } catch (error) {
+      console.error(error);
+      alert('Erro ao conectar com o backend!');
+    }
+  }
+
+</script>
+
 </body>
 </html>
