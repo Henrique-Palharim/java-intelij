@@ -153,12 +153,8 @@
   // GET - Listar campeões
   async function carregarCampeoes() {
     try {
+      document.getElementById('input-busca').value = ''; // Limpa o campo ao atualizar a lista
       const response = await fetch(API_URL);
-      /*
-        Exemplo de requisição GET por nome
-
-        const response = await fetch(`http://localhost:8081/campeoes/nome/${nome}`);
-      */
 
       if (!response.ok) throw new Error('Erro ao buscar campeões');
 
@@ -330,23 +326,6 @@
   function tratarEnterBusca(event) {
     if (event.key === 'Enter') {
       buscarPorNomeFrontend();
-    }
-  }
-
-  // Atualização da função carregarCampeoes existente para limpar a barra de pesquisa
-  async function carregarCampeoes() {
-    try {
-      document.getElementById('input-busca').value = ''; // Limpa o campo ao atualizar a lista
-      const response = await fetch(API_URL);
-
-      if (!response.ok) throw new Error('Erro ao buscar campeões');
-
-      const campeoes = await response.json();
-      renderizarTabela(campeoes);
-
-    } catch (error) {
-      console.error(error);
-      alert('Erro ao conectar com o backend!');
     }
   }
 
